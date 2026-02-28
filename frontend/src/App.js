@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Login from './components/Login';
@@ -20,7 +20,7 @@ function App() {
   const { user } = useAuth();
 
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="app">
         <Routes>
           <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />

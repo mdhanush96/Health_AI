@@ -73,7 +73,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'health_ai_db'),
         'USER': os.environ.get('DB_USER', 'health_user'),
         'PASSWORD': os.environ.get('DB_PASSWORD', 'health_password'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
@@ -125,7 +125,7 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = os.environ.get(
     'CORS_ALLOWED_ORIGINS',
-    'http://localhost:3000,http://127.0.0.1:3000'
+    'http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001'
 ).split(',')
 # NOTE: In production, set CORS_ALLOWED_ORIGINS to your actual frontend domain(s).
 
@@ -133,12 +133,32 @@ CORS_ALLOW_CREDENTIALS = True
 
 # ML Model Configuration
 ML_MODELS = {
-    'SYMPTOM_CLASSIFIER': os.environ.get('SYMPTOM_MODEL', 'emilyalsentzer/Bio_ClinicalBERT'),
-    'NER_MODEL': os.environ.get('NER_MODEL', 'allenai/scibert_scivocab_uncased'),
+    'SYMPTOM_CLASSIFIER': os.environ.get('SYMPTOM_MODEL', str(BASE_DIR.parent / 'ml' / 'clinicalbert_model')),
+    'NER_MODEL': os.environ.get('NER_MODEL', 'dmis-lab/biobert-base-cased-v1.1'),
     'SUMMARIZER': os.environ.get('SUMMARIZER_MODEL', 't5-small'),
     'EMBEDDING_MODEL': os.environ.get('EMBEDDING_MODEL', 'all-MiniLM-L6-v2'),
     'FAISS_INDEX_PATH': os.environ.get('FAISS_INDEX_PATH', str(BASE_DIR / 'ml_data' / 'faiss_index')),
     'KNOWLEDGE_BASE_PATH': os.environ.get('KB_PATH', str(BASE_DIR / 'ml_data' / 'knowledge_base.json')),
+    'CONDITION_RECOMMENDATIONS_PATH': os.environ.get(
+        'CONDITION_RECOMMENDATIONS_PATH',
+        str(BASE_DIR / 'ml_data' / 'condition_recommendations.json'),
+    ),
+    'MEDICATION_SAFETY_PATH': os.environ.get(
+        'MEDICATION_SAFETY_PATH',
+        str(BASE_DIR / 'ml_data' / 'medication_safety.json'),
+    ),
+    'SPECIALIST_MAPPING_PATH': os.environ.get(
+        'SPECIALIST_MAPPING_PATH',
+        str(BASE_DIR / 'ml_data' / 'specialist_mapping.json'),
+    ),
+    'EMERGENCY_RULES_PATH': os.environ.get(
+        'EMERGENCY_RULES_PATH',
+        str(BASE_DIR / 'ml_data' / 'emergency_rules.json'),
+    ),
+    'NUTRITION_DATASET_PATH': os.environ.get(
+        'NUTRITION_DATASET_PATH',
+        str(BASE_DIR / 'ml_data' / 'nutrition_dataset.json'),
+    ),
 }
 
 # AWS Configuration

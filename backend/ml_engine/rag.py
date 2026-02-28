@@ -1,10 +1,11 @@
 """
 Retrieval-Augmented Generation (RAG) system using FAISS + SBERT.
-Provides grounded medical responses from a curated knowledge base.
+Provides educational context from a curated knowledge base.
 """
 import json
 import logging
 import os
+import re
 from typing import List, Dict
 
 logger = logging.getLogger('health_ai')
@@ -167,7 +168,7 @@ class RAGSystem:
         return [doc for _, doc in scored[:top_k]]
 
     def generate_response(self, query: str, symptom_category: str = '') -> Dict:
-        """Generate a grounded medical response using retrieved context."""
+        """Generate educational explanation only; never treatment recommendations."""
         retrieved_docs = self.retrieve(query, top_k=5)
 
         if not retrieved_docs:
@@ -183,14 +184,37 @@ class RAGSystem:
             context_parts.append(doc['text'])
         context = ' '.join(context_parts)
 
-        # Try T5-based generation
+        # Educational explanation only
         response_text = self._generate_with_model(query, context)
+        response_text = self._sanitize_unsafe_clinical_content(response_text)
 
         return {
             'response': response_text,
             'sources': [d.get('source', 'Medical Guidelines') for d in retrieved_docs[:3]],
             'retrieved_context': context[:300],
         }
+
+    def _sanitize_unsafe_clinical_content(self, text: str) -> str:
+        # LLM must never generate medications
+        # All medication data must come from structured dataset
+        sanitized = text
+        try:
+            from .clinical_data_store import get_clinical_data_store
+            store = get_clinical_data_store()
+            for med in store.medication_safety:
+                med_name = med.get('name', '').replace('_', ' ').strip()
+                if med_name:
+                    sanitized = re.sub(
+                        rf'\b{re.escape(med_name)}\b',
+                        'structured medication guidance',
+                        sanitized,
+                        flags=re.IGNORECASE,
+                    )
+        except Exception:
+            pass
+
+        sanitized = re.sub(r'\b\d+\s?(mg|mcg|g|ml|units)\b', '', sanitized, flags=re.IGNORECASE)
+        return re.sub(r'\s{2,}', ' ', sanitized).strip()
 
     def _get_generator(self):
         """Lazily load and cache the T5 generation pipeline."""
@@ -208,12 +232,16 @@ class RAGSystem:
         return self._generator
 
     def _generate_with_model(self, query: str, context: str) -> str:
-        """Generate response using T5 with retrieved context."""
+        """Generate educational context text using retrieved content."""
         try:
             gen = self._get_generator()
             if gen is None:
                 raise RuntimeError('Generator not available')
-            prompt = f'Medical question: {query} Context: {context[:300]} Answer:'
+            prompt = (
+                f'Medical question: {query} Context: {context[:300]} '
+                'Generate educational background and preventive awareness only. '
+                'Do not provide medication names, dosage, or treatment plans. Answer:'
+            )
             result = gen(prompt, max_length=150, truncation=True)
             return result[0]['generated_text']
         except Exception as e:

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { symptomAPI, emergencyAPI } from '../api';
+import { symptomAPI } from '../api';
 import { Sidebar } from './Dashboard';
 
-const RiskBadge = ({ level }) => {
+const SeverityBadge = ({ level }) => {
+  const normalized = String(level || '').toUpperCase();
   const classes = {
     LOW: 'badge badge-low',
     MEDIUM: 'badge badge-medium',
     HIGH: 'badge badge-high',
     CRITICAL: 'badge badge-critical',
   };
-  return <span className={classes[level] || 'badge'}>{level}</span>;
+  return <span className={classes[normalized] || 'badge'}>{normalized || 'UNKNOWN'}</span>;
 };
 
 const SymptomForm = () => {
@@ -27,20 +28,13 @@ const SymptomForm = () => {
     setResult(null);
 
     try {
-      // Check for emergency first
-      const emergencyResponse = await emergencyAPI.check(symptomText);
-      const emergencyData = emergencyResponse.data;
-
-      // Perform symptom analysis
       const analysisResponse = await symptomAPI.analyze(symptomText);
       const analysisData = analysisResponse.data;
 
-      setResult({ analysis: analysisData, emergency: emergencyData });
+      setResult(analysisData);
 
-      if (emergencyData.severity === 'CRITICAL') {
+      if (analysisData.emergency === true) {
         toast.error('⚠️ CRITICAL: Seek immediate medical attention!', { autoClose: false });
-      } else if (emergencyData.severity === 'HIGH') {
-        toast.warning('⚠️ HIGH: Please see a doctor today.');
       } else {
         toast.success('Analysis complete!');
       }
@@ -112,61 +106,72 @@ const SymptomForm = () => {
         {result && (
           <>
             {/* Emergency Alert */}
-            {result.emergency.severity !== 'LOW' && (
-              <div className={`emergency-banner ${result.emergency.severity === 'CRITICAL' ? 'critical' : ''}`}>
+            {result.emergency === true && (
+              <div className={`emergency-banner ${String(result.severity).toUpperCase() === 'CRITICAL' ? 'critical' : ''}`}>
                 <div className="emergency-title">
-                  🚨 {result.emergency.severity} ALERT
+                  🚨 {String(result.severity).toUpperCase()} ALERT
                 </div>
-                <p style={{ marginBottom: '8px' }}>{result.emergency.recommended_action}</p>
-                <strong>Emergency Contact: {result.emergency.emergency_contact}</strong>
-                {result.emergency.triggered_keywords?.length > 0 && (
-                  <div style={{ marginTop: '8px', fontSize: '0.82rem' }}>
-                    Detected: {result.emergency.triggered_keywords.join(', ')}
-                  </div>
-                )}
+                <p style={{ marginBottom: '8px' }}>{result.action}</p>
+                <strong>Recommended Specialist: {result.specialist}</strong>
               </div>
             )}
 
             {/* Analysis Results */}
+            {result.emergency !== true && (
             <div className="card">
               <h2 className="card-title">📊 Analysis Results</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '20px' }}>
                 <div>
-                  <div className="form-label">Classification</div>
+                  <div className="form-label">Condition</div>
                   <strong style={{ textTransform: 'capitalize', fontSize: '1.1rem' }}>
-                    {result.analysis.classification}
+                    {String(result.condition || '').replaceAll('_', ' ')}
                   </strong>
                 </div>
                 <div>
-                  <div className="form-label">Risk Level</div>
-                  <RiskBadge level={result.analysis.risk_level} />
+                  <div className="form-label">Severity</div>
+                  <SeverityBadge level={result.severity} />
                 </div>
                 <div>
-                  <div className="form-label">Confidence</div>
-                  <strong>{(result.analysis.confidence_score * 100).toFixed(1)}%</strong>
+                  <div className="form-label">Specialist</div>
+                  <strong>{result.specialist}</strong>
                 </div>
               </div>
 
-              <div className="form-label">AI Medical Response (RAG-Powered)</div>
+              <div className="form-label">Educational Explanation (RAG)</div>
               <div className="response-box">
-                {result.analysis.rag_response}
+                {result.educational_explanation}
               </div>
 
-              {result.analysis.sources?.length > 0 && (
+              {result.safe_otc?.length > 0 && (
                 <div style={{ marginTop: '12px' }}>
-                  <span className="form-label">Sources: </span>
+                  <span className="form-label">Safe OTC Options: </span>
                   <div className="sources-list">
-                    {result.analysis.sources.map((src, i) => (
-                      <span key={i} className="source-tag">{src}</span>
+                    {result.safe_otc.map((med, i) => (
+                      <span key={i} className="source-tag">{med}</span>
                     ))}
                   </div>
                 </div>
               )}
 
+              <div style={{ marginTop: '16px' }}>
+                <div className="form-label">Diet</div>
+                <ul className="rec-list">
+                  {(result.diet || []).slice(0, 5).map((item, i) => <li key={`diet-${i}`}>{item}</li>)}
+                </ul>
+                <div className="form-label">Exercise</div>
+                <ul className="rec-list">
+                  {(result.exercise || []).slice(0, 4).map((item, i) => <li key={`exercise-${i}`}>{item}</li>)}
+                </ul>
+                <div className="form-label">Lifestyle</div>
+                <ul className="rec-list">
+                  {(result.lifestyle || []).slice(0, 4).map((item, i) => <li key={`life-${i}`}>{item}</li>)}
+                </ul>
+              </div>
+
               <div style={{ marginTop: '20px', display: 'flex', gap: '12px' }}>
                 <button
                   className="btn btn-primary"
-                  onClick={() => navigate(`/recommendations?analysis_id=${result.analysis.analysis_id}`)}
+                  onClick={() => navigate('/recommendations')}
                 >
                   💊 Get Recommendations
                 </button>
@@ -178,6 +183,7 @@ const SymptomForm = () => {
                 </button>
               </div>
             </div>
+            )}
           </>
         )}
       </main>

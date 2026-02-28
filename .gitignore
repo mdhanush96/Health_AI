@@ -22,9 +22,12 @@ logs/
 # ML Models (large files)
 *.pt
 *.bin
+*.safetensors
 *.onnx
 ml_data/faiss_index.bin
 ml_data/faiss_metadata.json
+ml/clinicalbert_model/checkpoint-*/
+ml/clinicalbert_model/model.safetensors
 
 # Node
 node_modules/

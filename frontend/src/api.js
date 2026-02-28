@@ -7,17 +7,106 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+const authApi = axios.create({
+  baseURL: API_BASE,
+  headers: { 'Content-Type': 'application/json' },
+});
+
+let refreshPromise = null;
+
+const decodeJwtPayload = (token) => {
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  } catch (err) {
+    return null;
+  }
+};
+
+const isTokenExpired = (token, skewSeconds = 30) => {
+  const payload = decodeJwtPayload(token);
+  if (!payload?.exp) return true;
+  const now = Math.floor(Date.now() / 1000);
+  return payload.exp <= (now + skewSeconds);
+};
+
+const refreshAccessToken = async () => {
+  const tokenRaw = localStorage.getItem('health_ai_tokens');
+  if (!tokenRaw) return null;
+
+  const parsedTokens = JSON.parse(tokenRaw);
+  if (!parsedTokens?.refresh) return null;
+
+  if (!refreshPromise) {
+    refreshPromise = authApi.post('/auth/token/refresh/', {
+      refresh: parsedTokens.refresh,
+    })
+      .then((response) => {
+        const updatedTokens = {
+          ...parsedTokens,
+          access: response.data.access,
+        };
+        localStorage.setItem('health_ai_tokens', JSON.stringify(updatedTokens));
+        return updatedTokens.access;
+      })
+      .catch((error) => {
+        localStorage.removeItem('health_ai_tokens');
+        localStorage.removeItem('health_ai_user');
+        throw error;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
+};
+
 // Request interceptor to add auth token
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
     const tokens = localStorage.getItem('health_ai_tokens');
     if (tokens) {
       const { access } = JSON.parse(tokens);
-      config.headers.Authorization = `Bearer ${access}`;
+      let finalAccess = access;
+
+      if (access && isTokenExpired(access)) {
+        finalAccess = await refreshAccessToken();
+      }
+
+      if (finalAccess) {
+        config.headers.Authorization = `Bearer ${finalAccess}`;
+      }
     }
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    const status = error?.response?.status;
+
+    if (status !== 401 || !originalRequest || originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    try {
+      originalRequest._retry = true;
+      const refreshedAccess = await refreshAccessToken();
+      if (!refreshedAccess) {
+        return Promise.reject(error);
+      }
+
+      originalRequest.headers.Authorization = `Bearer ${refreshedAccess}`;
+
+      return api(originalRequest);
+    } catch (refreshError) {
+      return Promise.reject(refreshError);
+    }
+  }
 );
 
 export const symptomAPI = {

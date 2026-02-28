@@ -7,6 +7,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Report
 from .serializers import ReportSerializer, ReportUploadSerializer
 from .ocr import extract_text_from_file, detect_report_type
+from .summarizer import summarize
+from ml_engine.ner import get_ner_extractor
 
 logger = logging.getLogger('health_ai')
 
@@ -62,10 +64,9 @@ class ReportAnalyzeView(generics.RetrieveAPIView):
         if not report.extracted_text:
             return Response({'error': 'No text extracted from this report'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Import summarizer lazily to avoid startup delay
-        from ml_engine.summarizer import get_summarizer
-        summarizer = get_summarizer()
-        summary = summarizer.summarize(report.extracted_text)
+        summary = summarize(report.extracted_text)
+        ner_extractor = get_ner_extractor()
+        entities = ner_extractor.extract(report.extracted_text)
 
         report.summary = summary
         report.save(update_fields=['summary'])
@@ -73,6 +74,7 @@ class ReportAnalyzeView(generics.RetrieveAPIView):
         return Response({
             'report_id': report.id,
             'summary': summary,
+            'entities': entities,
             'extracted_text': report.extracted_text[:500] + '...' if len(report.extracted_text) > 500 else report.extracted_text,
         })
 

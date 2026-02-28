@@ -1,0 +1,130 @@
+[
+  {
+    "name": "acetaminophen",
+    "indications": ["fever", "mild_pain", "headache"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": ["severe_liver_disease"],
+    "avoid_with_red_flags": ["severe_abdominal_pain", "unconsciousness"],
+    "max_daily_note": "Do not exceed local label maximum daily dose."
+  },
+  {
+    "name": "ibuprofen",
+    "indications": ["inflammatory_pain", "musculoskeletal_pain", "headache"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": ["peptic_ulcer", "chronic_kidney_disease", "uncontrolled_hypertension", "cardiovascular"],
+    "avoid_with_red_flags": ["blood_in_stool", "chest_pain", "severe_dehydration"],
+    "max_daily_note": "Use shortest duration possible with food."
+  },
+  {
+    "name": "famotidine",
+    "indications": ["acid_reflux", "heartburn"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": ["severe_kidney_disease"],
+    "avoid_with_red_flags": ["vomiting_blood", "black_stool"],
+    "max_daily_note": "Short-term OTC use only unless clinician advises."
+  },
+  {
+    "name": "simethicone",
+    "indications": ["bloating", "gas_discomfort"],
+    "allowed_severity": ["low"],
+    "contraindicated_conditions": [],
+    "avoid_with_red_flags": ["severe_abdominal_pain"],
+    "max_daily_note": "Use as needed per OTC label."
+  },
+  {
+    "name": "oral_rehydration_solution",
+    "indications": ["dehydration", "diarrhea", "fever"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": ["severe_fluid_restriction"],
+    "avoid_with_red_flags": ["persistent_vomiting", "confusion"],
+    "max_daily_note": "Frequent small sips preferred."
+  },
+  {
+    "name": "guaifenesin",
+    "indications": ["productive_cough"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": [],
+    "avoid_with_red_flags": ["hemoptysis", "severe_shortness_of_breath"],
+    "max_daily_note": "Hydration improves efficacy."
+  },
+  {
+    "name": "saline_nasal_spray",
+    "indications": ["nasal_congestion", "allergic_irritation"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": [],
+    "avoid_with_red_flags": [],
+    "max_daily_note": "Non-medicated supportive option."
+  },
+  {
+    "name": "cetirizine",
+    "indications": ["allergic_rhinitis", "itching", "urticaria"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": ["severe_kidney_disease"],
+    "avoid_with_red_flags": ["anaphylaxis", "breathing_difficulty"],
+    "max_daily_note": "May cause drowsiness in some patients."
+  },
+  {
+    "name": "loratadine",
+    "indications": ["allergic_rhinitis", "hives"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": ["severe_liver_disease"],
+    "avoid_with_red_flags": ["anaphylaxis"],
+    "max_daily_note": "Non-sedating antihistamine option."
+  },
+  {
+    "name": "hydrocortisone_topical",
+    "indications": ["eczema_flare", "mild_dermatitis"],
+    "allowed_severity": ["low"],
+    "contraindicated_conditions": ["skin_infection"],
+    "avoid_with_red_flags": ["rapidly_spreading_rash"],
+    "max_daily_note": "Avoid prolonged use on face unless advised."
+  },
+  {
+    "name": "calamine_lotion",
+    "indications": ["itching", "mild_skin_irritation"],
+    "allowed_severity": ["low"],
+    "contraindicated_conditions": [],
+    "avoid_with_red_flags": ["facial_swelling"],
+    "max_daily_note": "External use only."
+  },
+  {
+    "name": "psyllium",
+    "indications": ["constipation"],
+    "allowed_severity": ["low"],
+    "contraindicated_conditions": ["bowel_obstruction"],
+    "avoid_with_red_flags": ["blood_in_stool", "severe_abdominal_pain"],
+    "max_daily_note": "Take with adequate water."
+  },
+  {
+    "name": "loperamide",
+    "indications": ["acute_nonbloody_diarrhea"],
+    "allowed_severity": ["low"],
+    "contraindicated_conditions": ["infectious_bloody_diarrhea"],
+    "avoid_with_red_flags": ["high_fever", "blood_in_stool"],
+    "max_daily_note": "Avoid if fever or blood present."
+  },
+  {
+    "name": "melatonin",
+    "indications": ["sleep_onset_difficulty"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": ["autoimmune_disease"],
+    "avoid_with_red_flags": ["suicidal_thoughts", "severe_confusion"],
+    "max_daily_note": "Short-term sleep support only."
+  },
+  {
+    "name": "topical_diclofenac",
+    "indications": ["localized_joint_pain"],
+    "allowed_severity": ["low", "moderate"],
+    "contraindicated_conditions": ["nsaid_allergy", "cardiovascular"],
+    "avoid_with_red_flags": ["chest_pain", "severe_trauma"],
+    "max_daily_note": "Apply only to intact skin as labeled."
+  },
+  {
+    "name": "bismuth_subsalicylate",
+    "indications": ["indigestion", "mild_diarrhea"],
+    "allowed_severity": ["low"],
+    "contraindicated_conditions": ["salicylate_allergy", "bleeding_disorder"],
+    "avoid_with_red_flags": ["black_stool", "vomiting_blood"],
+    "max_daily_note": "Avoid in children/teens with viral illness."
+  }
+]

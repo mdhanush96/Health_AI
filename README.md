@@ -127,6 +127,13 @@ pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with your MySQL credentials
 
+# Initialize MySQL user/database (run once in MySQL shell as root)
+CREATE DATABASE IF NOT EXISTS health_ai_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'health_user'@'localhost' IDENTIFIED BY 'health_password';
+ALTER USER 'health_user'@'localhost' IDENTIFIED BY 'health_password';
+GRANT ALL PRIVILEGES ON health_ai_db.* TO 'health_user'@'localhost';
+FLUSH PRIVILEGES;
+
 # Run migrations
 python manage.py migrate
 

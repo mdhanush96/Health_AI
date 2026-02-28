@@ -1,0 +1,16 @@
+[
+  {"condition": "cardiovascular", "specialist": "Cardiologist"},
+  {"condition": "hypertension", "specialist": "Cardiologist"},
+  {"condition": "type_2_diabetes", "specialist": "Endocrinologist"},
+  {"condition": "endocrine", "specialist": "Endocrinologist"},
+  {"condition": "respiratory", "specialist": "Pulmonologist"},
+  {"condition": "asthma", "specialist": "Pulmonologist"},
+  {"condition": "neurological", "specialist": "Neurologist"},
+  {"condition": "migraine", "specialist": "Neurologist"},
+  {"condition": "gastrointestinal", "specialist": "Gastroenterologist"},
+  {"condition": "musculoskeletal", "specialist": "Orthopedic Specialist"},
+  {"condition": "dermatological", "specialist": "Dermatologist"},
+  {"condition": "psychiatric", "specialist": "Psychiatrist"},
+  {"condition": "infectious", "specialist": "Infectious Disease Specialist"},
+  {"condition": "general", "specialist": "General Physician"}
+]

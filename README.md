@@ -96,6 +96,11 @@ A full-stack, AI-powered healthcare assistant integrating Clinical NLP, Medical 
 - MySQL 8.0+
 - Tesseract OCR (`sudo apt install tesseract-ocr`)
 
+### Model Artifacts (Important)
+- Large trained model files are intentionally not tracked in Git (for example `*.safetensors` and `ml/clinicalbert_model/checkpoint-*`).
+- Keep models in local storage or object storage (S3/GDrive), then point the app to those paths using your `.env` model path settings.
+- If you need shared model distribution through Git, use Git LFS instead of normal Git objects.
+
 ### Option 1: Docker (Recommended)
 
 ```bash

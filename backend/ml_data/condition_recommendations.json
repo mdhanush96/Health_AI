@@ -1,0 +1,110 @@
+[
+  {
+    "condition": "cardiovascular",
+    "severity_defaults": "moderate",
+    "diet": ["Low-sodium meals (<2g sodium/day)", "Increase vegetables and legumes", "Avoid processed trans-fat foods"],
+    "exercise": ["Brisk walking 20-30 min, 5 days/week", "Light aerobic warm-up with pulse monitoring"],
+    "lifestyle": ["Track blood pressure daily", "Stop smoking and avoid alcohol binges", "Maintain 7-8 hours sleep"],
+    "otc_candidates": ["acetaminophen"],
+    "clinical_notes": "Escalate if chest pain, syncope, or resting breathlessness appears."
+  },
+  {
+    "condition": "hypertension",
+    "severity_defaults": "moderate",
+    "diet": ["DASH-style eating pattern", "Limit added salt and packaged foods", "Increase potassium-rich foods if medically appropriate"],
+    "exercise": ["Moderate cardio 150 min/week", "Stretching and cool-down routines"],
+    "lifestyle": ["Home BP log morning/evening", "Stress reduction breathing routine", "Limit caffeine excess"],
+    "otc_candidates": ["acetaminophen"],
+    "clinical_notes": "Persistent readings >= 180/120 with symptoms are emergency signals."
+  },
+  {
+    "condition": "type_2_diabetes",
+    "severity_defaults": "moderate",
+    "diet": ["Controlled carbohydrate plate method", "High-fiber whole grains and pulses", "Avoid sugary beverages"],
+    "exercise": ["Post-meal walking 10-15 min", "Resistance training 2-3 times/week"],
+    "lifestyle": ["Monitor fasting and post-prandial glucose", "Foot care and hydration", "Consistent meal timing"],
+    "otc_candidates": ["oral_rehydration_solution"],
+    "clinical_notes": "Hypoglycemia symptoms or persistent hyperglycemia need urgent clinical review."
+  },
+  {
+    "condition": "respiratory",
+    "severity_defaults": "moderate",
+    "diet": ["Warm fluids and hydration", "Protein-rich soft meals", "Avoid smoke exposure triggers"],
+    "exercise": ["Gentle breathing exercises", "Low-intensity mobility during recovery"],
+    "lifestyle": ["Use mask in polluted environments", "Maintain room humidity", "Track wheeze and nocturnal symptoms"],
+    "otc_candidates": ["guaifenesin", "saline_nasal_spray"],
+    "clinical_notes": "Worsening dyspnea or cyanosis requires emergency care."
+  },
+  {
+    "condition": "asthma",
+    "severity_defaults": "moderate",
+    "diet": ["Hydration and anti-inflammatory foods", "Avoid known food triggers"],
+    "exercise": ["Pursed-lip breathing practice", "Low-impact interval activity if symptom free"],
+    "lifestyle": ["Avoid dust and allergens", "Track peak-flow if available", "Follow inhaler technique education"],
+    "otc_candidates": ["saline_nasal_spray"],
+    "clinical_notes": "Unable to speak full sentences due to breathlessness is critical."
+  },
+  {
+    "condition": "gastrointestinal",
+    "severity_defaults": "low",
+    "diet": ["Small frequent meals", "Avoid spicy and acidic trigger foods", "Use bland diet during acute episodes"],
+    "exercise": ["Post-meal light walk", "Core mobility exercises"],
+    "lifestyle": ["Do not lie down immediately after meals", "Hydrate adequately", "Track stool pattern changes"],
+    "otc_candidates": ["famotidine", "oral_rehydration_solution", "simethicone"],
+    "clinical_notes": "Blood in stool, severe abdominal rigidity, or persistent vomiting are red flags."
+  },
+  {
+    "condition": "neurological",
+    "severity_defaults": "moderate",
+    "diet": ["Regular hydration", "Limit trigger foods (aged cheese, excess caffeine)", "Balanced magnesium-rich diet"],
+    "exercise": ["Neck and posture stretches", "Gentle aerobic activity"],
+    "lifestyle": ["Sleep schedule stabilization", "Limit screen glare", "Symptom diary for headache/aura"],
+    "otc_candidates": ["acetaminophen", "ibuprofen"],
+    "clinical_notes": "Sudden focal weakness, slurred speech, or seizure is emergency."
+  },
+  {
+    "condition": "migraine",
+    "severity_defaults": "moderate",
+    "diet": ["Regular meals to avoid fasting trigger", "Maintain hydration", "Avoid personal trigger foods"],
+    "exercise": ["Light yoga", "Daily low-impact cardio"],
+    "lifestyle": ["Dark quiet rest during episode", "Stress management routine", "Sleep hygiene"],
+    "otc_candidates": ["acetaminophen", "ibuprofen"],
+    "clinical_notes": "First severe worst-ever headache should be medically evaluated urgently."
+  },
+  {
+    "condition": "musculoskeletal",
+    "severity_defaults": "low",
+    "diet": ["Adequate protein intake", "Vitamin D and calcium supportive foods", "Anti-inflammatory whole foods"],
+    "exercise": ["Targeted stretching", "Progressive strengthening", "Posture correction drills"],
+    "lifestyle": ["Ergonomic workspace setup", "Avoid prolonged bed rest", "Apply heat/ice as advised"],
+    "otc_candidates": ["ibuprofen", "topical_diclofenac"],
+    "clinical_notes": "Acute trauma with deformity or neurological loss requires urgent care."
+  },
+  {
+    "condition": "infectious",
+    "severity_defaults": "low",
+    "diet": ["Oral hydration and soups", "Soft high-protein meals", "Electrolyte replacement if fever"],
+    "exercise": ["Rest during fever", "Resume light movement after recovery"],
+    "lifestyle": ["Temperature monitoring", "Hand hygiene and isolation if contagious", "Seek test-guided care"],
+    "otc_candidates": ["acetaminophen", "oral_rehydration_solution"],
+    "clinical_notes": "High persistent fever, confusion, or breathing distress is emergency."
+  },
+  {
+    "condition": "psychiatric",
+    "severity_defaults": "moderate",
+    "diet": ["Regular balanced meals", "Reduce alcohol and excess caffeine", "Omega-3 supportive foods"],
+    "exercise": ["Daily walking routine", "Mind-body breathing exercises"],
+    "lifestyle": ["Sleep routine", "Structured social support", "Professional counseling follow-up"],
+    "otc_candidates": ["melatonin"],
+    "clinical_notes": "Self-harm thoughts or psychosis signs require immediate emergency support."
+  },
+  {
+    "condition": "dermatological",
+    "severity_defaults": "low",
+    "diet": ["Hydration and antioxidant foods", "Track and avoid flare triggers"],
+    "exercise": ["Sweat hygiene after activity", "Moderate activity for stress reduction"],
+    "lifestyle": ["Use non-irritant skin products", "Avoid scratching lesions", "Moisturize regularly"],
+    "otc_candidates": ["cetirizine", "hydrocortisone_topical"],
+    "clinical_notes": "Rapidly spreading rash with breathing issues is emergency."
+  }
+]

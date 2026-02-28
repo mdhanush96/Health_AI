@@ -1,0 +1,276 @@
+MyHealth AI - Updated Detailed Project Review (Current State)
+=============================================================
+
+1) Project Overview
+-------------------
+MyHealth AI is a full-stack healthcare decision-support platform with a safety-first hybrid architecture.
+
+Technology stack:
+- Backend: Django 4.2 + DRF + JWT auth
+- Frontend: React SPA
+- Database: MySQL
+- NLP/ML: ClinicalBERT classifier, deterministic recommendation engine, constrained RAG explanation layer
+- Report AI: OCR + T5 summarization + BioBERT-based NER extraction
+
+Core architecture now enforced:
+1. Structured clinical recommendation datasets (deterministic)
+2. Rule-based emergency and medication safety overrides
+3. RAG/LLM for educational explanation only (not medication/treatment generation)
+
+
+2) Current Top-Level Structure
+------------------------------
+Health_AI/
+- backend/
+  - health_ai/                    Project settings, root urls, wsgi
+  - users/                        Auth APIs
+  - ml_engine/                    Symptom intelligence core (hybrid architecture)
+  - reports/                      Upload/OCR/analyze report APIs
+  - emergency/                    Emergency severity APIs
+  - recommendations/              Recommendation endpoints/history
+  - history/                      Unified user history APIs
+  - ml_data/                      Structured clinical JSON datasets
+  - requirements.txt              Backend dependency lock
+- frontend/
+  - src/                          React app + APIs + routing/components
+  - public/                       index.html + favicon.svg
+- ml/
+  - data/                         symptom_dataset.csv + report eval samples
+  - train_clinicalbert.py         ClinicalBERT training script
+  - evaluate_t5.py                ROUGE evaluation script for summarization
+  - evaluation_report.md          Metrics reporting artifact
+  - clinicalbert_model/           Fine-tuned model artifacts (generated)
+
+
+3) Backend: Key Modules and Roles
+---------------------------------
+A) backend/health_ai/settings.py
+- Configures JWT, CORS, DB, logging, and ML path settings
+- CORS supports both localhost:3000 and localhost:3001
+- ML model/data pointers include:
+  - SYMPTOM_MODEL -> defaults to ../ml/clinicalbert_model
+  - NER_MODEL -> dmis-lab/biobert-base-cased-v1.1
+  - SUMMARIZER_MODEL -> t5-small
+  - structured JSON data paths in backend/ml_data/
+
+B) backend/ml_engine/classifier.py
+- Loads fine-tuned ClinicalBERT from local model directory when available
+- Reads label mapping from label_classes.json
+- Returns (category, confidence, risk_level)
+- Keeps fallback rule-based classification only if model load/inference fails
+
+C) backend/ml_engine/clinical_data_store.py
+- One-time JSON loader + singleton cache for:
+  - knowledge_base.json
+  - condition_recommendations.json
+  - medication_safety.json
+  - specialist_mapping.json
+  - emergency_rules.json
+  - nutrition_dataset.json
+
+D) backend/ml_engine/emergency_rule_engine.py
+- Detects red-flag keywords from emergency_rules.json
+- Produces emergency override response with severity/action/specialist
+
+E) backend/ml_engine/clinical_decision_engine.py
+- Deterministic recommendation engine
+- Flow:
+  1) emergency check
+  2) if emergency -> immediate override response
+  3) else derive diet/exercise/lifestyle/specialist from structured datasets
+  4) filter OTC list through medication safety validator
+
+F) backend/ml_engine/rag.py and rag_pipeline.py
+- RAG used for educational explanation context only
+- Medication names/dosage-like outputs are sanitized/blocked
+- Comments and logic enforce:
+  - LLM must never generate medications
+  - Medication guidance must come from structured datasets
+
+G) backend/ml_engine/views.py (POST /api/symptom/)
+- Runtime flow:
+  1) Validate symptom_text
+  2) ClinicalBERT classify
+  3) Emergency rule engine check
+  4) Structured recommendation generation
+  5) Medication safety filtering
+  6) RAG educational explanation
+  7) Persist SymptomAnalysis
+  8) Return emergency or structured non-emergency JSON
+
+
+4) Report Analysis Pipeline (Updated)
+-------------------------------------
+A) backend/reports/ocr.py
+- Extracts raw text from PDF/IMAGE/CSV reports
+
+B) backend/reports/summarizer.py (NEW/UPDATED)
+- Uses direct AutoTokenizer + AutoModelForSeq2SeqLM generation (t5-small default)
+- Avoids pipeline-task compatibility issues across transformers versions
+- Falls back to extractive summary if model inference fails
+
+C) backend/ml_engine/ner.py (NEW)
+- BioBERT NER integration via transformers pipeline("ner")
+- Returns:
+  - raw_entities
+  - diseases
+  - medications
+  - lab_values (with regex-assisted lab capture)
+
+D) backend/reports/views.py (ReportAnalyzeView)
+- Integrates both summary generation and NER extraction
+- /api/report/analyze/ now returns summary + entities
+
+
+5) Frontend: Current Behavior
+-----------------------------
+A) src/api.js
+- Axios instance with:
+  - proactive access-token expiry check
+  - refresh-token exchange before protected calls when needed
+  - 401 retry once with refreshed token
+
+B) src/components/SymptomForm.js
+- Updated to consume new hybrid /api/symptom/ schema
+- Handles emergency vs non-emergency responses correctly
+- Displays structured fields (condition, severity, safe_otc, specialist, educational explanation)
+
+C) src/App.js
+- React Router private routes enabled
+- Future flags enabled to reduce v7 warning noise
+
+D) public/index.html + favicon.svg
+- favicon warnings resolved by explicit favicon asset
+
+
+6) ML Training & Evaluation Artifacts (Current)
+------------------------------------------------
+A) ml/data/symptom_dataset.csv
+- Current dataset present and used for training script
+- Format: text,label
+
+B) ml/train_clinicalbert.py
+- Fine-tunes Bio_ClinicalBERT for symptom class prediction
+- Saves:
+  - model weights/tokenizer -> ml/clinicalbert_model
+  - label_classes.json
+  - evaluation_metrics.json
+- Prints Accuracy and weighted F1
+- Includes warning when metrics are unrealistically near-perfect
+
+C) ml/evaluate_t5.py (UPDATED)
+- Evaluates summarization against reference summary with ROUGE-1 and ROUGE-L
+- Supports --input_text/--reference_summary and --input_file/--reference_file
+- Rejects placeholders/very-short invalid evaluation inputs
+- Uses direct seq2seq generation for compatibility
+
+D) ml/evaluation_report.md
+- Contains current metrics entries and notes
+
+
+7) API Endpoint Map (Current)
+-----------------------------
+- Auth:
+  - POST /api/auth/register/
+  - POST /api/auth/login/
+  - POST /api/auth/logout/
+  - POST /api/auth/token/refresh/
+  - GET/PUT /api/auth/profile/
+
+- Symptom intelligence:
+  - POST /api/symptom/
+
+- Emergency:
+  - POST /api/emergency/
+  - GET /api/emergency/alerts/
+  - PATCH /api/emergency/alerts/<id>/acknowledge/
+
+- Reports:
+  - POST /api/report/upload/
+  - POST /api/report/analyze/
+  - GET /api/report/list/
+
+- Recommendations/history:
+  - GET /api/recommend/
+  - GET /api/recommend/history/
+  - GET /api/history/
+
+
+8) End-to-End Data Flow (Symptom Query)
+----------------------------------------
+1) User submits symptom text from frontend
+2) Frontend sends POST /api/symptom/ with JWT
+3) Backend classifies with ClinicalBERT
+4) Emergency rules evaluate red flags
+5) If emergency -> immediate emergency response returned
+6) Else structured recommendation engine composes:
+   - diet, exercise, lifestyle, safe_otc, specialist
+7) Medication safety validator removes unsafe OTC options
+8) RAG adds educational explanation only
+9) Response persisted and sent to frontend
+
+
+9) Response Schemas (Current)
+-----------------------------
+Emergency response:
+{
+  "emergency": true,
+  "severity": "critical",
+  "action": "Immediate ER Visit",
+  "specialist": "Cardiologist"
+}
+
+Non-emergency response:
+{
+  "condition": "type_2_diabetes",
+  "severity": "moderate",
+  "emergency": false,
+  "diet": [...],
+  "exercise": [...],
+  "lifestyle": [...],
+  "safe_otc": [...],
+  "specialist": "Endocrinologist",
+  "educational_explanation": "..."
+}
+
+
+10) Current Commands (Verified Usage)
+-------------------------------------
+Run backend:
+- cd backend
+- .\venv\Scripts\activate
+- python manage.py migrate
+- python manage.py runserver
+
+Run frontend:
+- cd frontend
+- npm install
+- npm start
+
+Train ClinicalBERT:
+- cd ml
+- python train_clinicalbert.py --data_path ./data/symptom_dataset.csv --output_dir ./clinicalbert_model
+
+Evaluate T5 summary with files:
+- cd ml
+- python evaluate_t5.py --model_name t5-small --input_file ./data/report_input.txt --reference_file ./data/reference_summary.txt
+
+
+11) Current Known Notes
+-----------------------
+- Django autoreload in dev can show duplicate model-data load logs at startup (normal).
+- ClinicalBERT 1.0000 metrics on synthetic data are likely inflated; use external real validation data for truthful claims.
+- ROUGE evaluation now works with real text and file-based input.
+- Environment package mismatch can affect behavior (e.g., transformers major-version differences); project requirements should be used consistently in venv.
+
+
+12) Final System Position
+-------------------------
+The project currently operates as a controlled hybrid healthcare AI:
+- ClinicalBERT for classification
+- Rule engine for emergency override
+- Structured data for recommendations and medication safety
+- BioBERT NER + T5 for report analysis
+- RAG for educational explanation only
+
+This prevents free-form LLM medication/treatment generation and keeps recommendation outputs deterministic and safety-constrained.

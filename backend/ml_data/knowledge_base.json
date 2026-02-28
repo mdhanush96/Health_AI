@@ -1,0 +1,74 @@
+[
+  {
+    "id": "kb_001",
+    "condition": "cardiovascular",
+    "text": "Cardiovascular symptoms such as chest discomfort, exertional breathlessness, and palpitations should be evaluated promptly because they can indicate reduced cardiac perfusion or rhythm disturbance.",
+    "source": "AHA Patient Education"
+  },
+  {
+    "id": "kb_002",
+    "condition": "type_2_diabetes",
+    "text": "Type 2 diabetes is a metabolic condition in which blood glucose remains elevated due to insulin resistance and relative insulin deficiency. Lifestyle consistency and regular follow-up reduce long-term complications.",
+    "source": "ADA Standards Overview"
+  },
+  {
+    "id": "kb_003",
+    "condition": "respiratory",
+    "text": "Respiratory complaints including wheeze, persistent cough, and shortness of breath can arise from airway inflammation, infection, or bronchospasm and should be assessed in context of severity and duration.",
+    "source": "GINA Public Guidance"
+  },
+  {
+    "id": "kb_004",
+    "condition": "hypertension",
+    "text": "Hypertension often has no obvious symptoms, but sustained high blood pressure increases risk for stroke, heart failure, and kidney injury. Home blood pressure monitoring improves awareness.",
+    "source": "ACC/AHA Education"
+  },
+  {
+    "id": "kb_005",
+    "condition": "gastrointestinal",
+    "text": "Gastrointestinal symptoms like reflux, nausea, and abdominal discomfort are common and often manageable, but warning signs such as blood in stool or persistent vomiting need urgent evaluation.",
+    "source": "ACG Patient Information"
+  },
+  {
+    "id": "kb_006",
+    "condition": "migraine",
+    "text": "Migraine is a neurological disorder marked by episodic headache with sensory sensitivity. Identifying personal triggers and maintaining regular sleep can reduce recurrence.",
+    "source": "AAN Patient Resources"
+  },
+  {
+    "id": "kb_007",
+    "condition": "infectious",
+    "text": "Infectious syndromes may present with fever, fatigue, and localized symptoms. Hydration, rest, and timely clinical testing help guide safe management.",
+    "source": "CDC General Guidance"
+  },
+  {
+    "id": "kb_008",
+    "condition": "musculoskeletal",
+    "text": "Most uncomplicated musculoskeletal pain improves with graded activity, posture care, and short-term supportive therapy, while neurological deficits require rapid assessment.",
+    "source": "Orthopedic Clinical Guidance"
+  },
+  {
+    "id": "kb_009",
+    "condition": "psychiatric",
+    "text": "Anxiety and depression can affect sleep, concentration, appetite, and daily function. Early support, behavioral strategies, and professional evaluation improve outcomes.",
+    "source": "APA Public Education"
+  },
+  {
+    "id": "kb_010",
+    "condition": "dermatological",
+    "text": "Dermatological conditions include inflammatory and allergic skin disorders. Tracking symptom triggers and skin care routines supports symptom control.",
+    "source": "AAD Patient Guide"
+  },
+  {
+    "id": "kb_011",
+    "condition": "endocrine",
+    "text": "Endocrine disorders can present with weight change, fatigue, or fluid imbalance. Laboratory confirmation and specialist review are important for safe long-term planning.",
+    "source": "Endocrine Society Education"
+  },
+  {
+    "id": "kb_012",
+    "condition": "general",
+    "text": "General, non-specific symptoms should be monitored for progression. Escalate care quickly if red-flag features such as chest pain, severe breathlessness, confusion, or collapse occur.",
+    "source": "Primary Care Triage Guide"
+  }
+]

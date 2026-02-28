@@ -1,0 +1,90 @@
+[
+  {
+    "rule_id": "er_001",
+    "name": "acute_chest_pain_rule",
+    "keywords": ["chest pain", "crushing chest", "chest tightness"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Cardiologist"
+  },
+  {
+    "rule_id": "er_002",
+    "name": "stroke_sign_rule",
+    "keywords": ["slurred speech", "facial droop", "sudden weakness", "one side weak"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Neurologist"
+  },
+  {
+    "rule_id": "er_003",
+    "name": "severe_breathlessness_rule",
+    "keywords": ["cannot breathe", "severe shortness of breath", "gasping"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Pulmonologist"
+  },
+  {
+    "rule_id": "er_004",
+    "name": "anaphylaxis_rule",
+    "keywords": ["throat swelling", "anaphylaxis", "facial swelling with breathlessness"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Emergency Medicine"
+  },
+  {
+    "rule_id": "er_005",
+    "name": "seizure_rule",
+    "keywords": ["seizure", "convulsion", "fits"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Neurologist"
+  },
+  {
+    "rule_id": "er_006",
+    "name": "gi_bleeding_rule",
+    "keywords": ["vomiting blood", "blood in stool", "black stool"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Gastroenterologist"
+  },
+  {
+    "rule_id": "er_007",
+    "name": "unconsciousness_rule",
+    "keywords": ["unconscious", "collapsed", "not responding"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Emergency Medicine"
+  },
+  {
+    "rule_id": "er_008",
+    "name": "suicidality_rule",
+    "keywords": ["suicidal", "self harm", "want to die"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Psychiatrist"
+  },
+  {
+    "rule_id": "er_009",
+    "name": "severe_fever_with_confusion_rule",
+    "keywords": ["high fever above 104", "fever with confusion", "delirium"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Infectious Disease Specialist"
+  },
+  {
+    "rule_id": "er_010",
+    "name": "poisoning_overdose_rule",
+    "keywords": ["overdose", "poisoning", "toxic ingestion"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Emergency Medicine"
+  },
+  {
+    "rule_id": "er_011",
+    "name": "major_trauma_rule",
+    "keywords": ["severe bleeding", "major trauma", "bone protruding"],
+    "severity": "critical",
+    "action": "Immediate ER Visit",
+    "specialist": "Trauma Surgeon"
+  }
+]
